@@ -1,7 +1,7 @@
 "use server";
 
 const { revalidatePath } = require("next/cache");
-const { connectToDatabase } = require("../database/mongoose");
+const connectToDatabase = require("../database/mongoose");
 const { handleError } = require("../utils");
 const User = require("../database/models/user.model");
 const Image = require("../database/models/image.model");
@@ -16,7 +16,7 @@ const populateUser = (query) => query.populate({
 });
 
 // ADD IMAGE
-async function addImage({ image, userId, path }) {
+export async function addImage({ image, userId, path }) {
   try {
     await connectToDatabase();
 
@@ -28,7 +28,7 @@ async function addImage({ image, userId, path }) {
 
     const newImage = await Image.create({
       ...image,
-      author: author._id,
+      author: author?._id,
     });
 
     revalidatePath(path);
@@ -40,7 +40,7 @@ async function addImage({ image, userId, path }) {
 }
 
 // UPDATE IMAGE
-async function updateImage({ image, userId, path }) {
+export async function updateImage({ image, userId, path }) {
   try {
     await connectToDatabase();
 
@@ -65,7 +65,7 @@ async function updateImage({ image, userId, path }) {
 }
 
 // DELETE IMAGE
-async function deleteImage(imageId) {
+export async function deleteImage(imageId) {
   try {
     await connectToDatabase();
 
@@ -78,7 +78,7 @@ async function deleteImage(imageId) {
 }
 
 // GET IMAGE
-async function getImageById(imageId) {
+export async function getImageById(imageId) {
   try {
     await connectToDatabase();
 
@@ -93,7 +93,7 @@ async function getImageById(imageId) {
 }
 
 // GET IMAGES
-async function getAllImages({ limit = 9, page = 1, searchQuery = '' }) {
+export async function getAllImages({ limit = 9, page = 1, searchQuery = '' }) {
   try {
     await connectToDatabase();
 
@@ -104,7 +104,7 @@ async function getAllImages({ limit = 9, page = 1, searchQuery = '' }) {
       secure: true,
     });
 
-    let expression = 'folder=imaginify';
+    let expression = 'folder=imaginify_cloud';
 
     if (searchQuery) {
       expression += ` AND ${searchQuery}`;
@@ -135,7 +135,6 @@ async function getAllImages({ limit = 9, page = 1, searchQuery = '' }) {
 
     const totalImages = await Image.find(query).countDocuments();
     const savedImages = await Image.find().countDocuments();
-
     return {
       data: JSON.parse(JSON.stringify(images)),
       totalPage: Math.ceil(totalImages / limit),
@@ -147,7 +146,7 @@ async function getAllImages({ limit = 9, page = 1, searchQuery = '' }) {
 }
 
 // GET IMAGES BY USER
-async function getUserImages({ limit = 9, page = 1, userId }) {
+export async function getUserImages({ limit = 9, page = 1, userId }) {
   try {
     await connectToDatabase();
 
@@ -168,12 +167,3 @@ async function getUserImages({ limit = 9, page = 1, userId }) {
     handleError(error);
   }
 }
-
-module.exports = {
-  addImage,
-  updateImage,
-  deleteImage,
-  getImageById,
-  getAllImages,
-  getUserImages,
-};

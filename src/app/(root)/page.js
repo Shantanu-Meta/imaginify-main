@@ -1,18 +1,23 @@
-"use client"
+"use client";
 import { Collection } from "@/components/shared/Collection";
 import { navLinks } from "@/constants";
 import { getAllImages } from "@/lib/actions/image.actions";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const Home = ({ searchParams }) => {
   const page = Number(searchParams?.page) || 1;
   const searchQuery = searchParams?.query || "";
+  const [images, setImages] = useState(null);
 
-  const fetchData = async () => {
-    const images = await getAllImages({ page, searchQuery });
-    return images;
-  };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const resp = await getAllImages({ page, searchQuery });
+  //     setImages(resp);
+  //   };
+  //   fetchData();
+  // }, [searchParams]);
 
   return (
     <>
@@ -39,15 +44,9 @@ const Home = ({ searchParams }) => {
       <section className="sm:mt-12">
         <Collection
           hasSearch={true}
-          fetchData={fetchData}
-          render={(images) => (
-            <Collection
-              hasSearch={true}
-              images={images.data}
-              totalPages={images.totalPage}
-              page={page}
-            />
-          )}
+          images={images?.data}
+          totalPages={images?.totalPage}
+          page={page}
         />
       </section>
     </>

@@ -3,11 +3,11 @@
 const { redirect } = require('next/navigation');
 const Stripe = require("stripe");
 const { handleError } = require('../utils');
-const { connectToDatabase } = require('../database/mongoose');
+const  connectToDatabase  = require('../database/mongoose');
 const Transaction = require('../database/models/transaction.model');
 const { updateCredits } = require('./user.actions');
 
-async function checkoutCredits(transaction) {
+export async function checkoutCredits(transaction) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
   const amount = Number(transaction.amount) * 100;
@@ -38,7 +38,7 @@ async function checkoutCredits(transaction) {
   redirect(session.url);
 }
 
-async function createTransaction(transaction) {
+export async function createTransaction(transaction) {
   try {
     await connectToDatabase();
 
@@ -56,7 +56,4 @@ async function createTransaction(transaction) {
   }
 }
 
-module.exports = {
-  checkoutCredits,
-  createTransaction
-};
+

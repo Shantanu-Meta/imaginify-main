@@ -6,7 +6,7 @@ const connectToDatabase = require("../database/mongoose");
 const { handleError } = require("../utils");
 
 // CREATE
-async function createUser(user) {
+export async function createUser(user) {
   try {
     await connectToDatabase();
 
@@ -19,7 +19,7 @@ async function createUser(user) {
 }
 
 // READ
-async function getUserById(userId) {
+export async function getUserById(userId) {
   try {
     await connectToDatabase();
 
@@ -34,7 +34,7 @@ async function getUserById(userId) {
 }
 
 // UPDATE
-async function updateUser(clerkId, user) {
+export async function updateUser(clerkId, user) {
   try {
     await connectToDatabase();
 
@@ -51,7 +51,7 @@ async function updateUser(clerkId, user) {
 }
 
 // DELETE
-async function deleteUser(clerkId) {
+export async function deleteUser(clerkId) {
   try {
     await connectToDatabase();
 
@@ -73,7 +73,7 @@ async function deleteUser(clerkId) {
 }
 
 // USE CREDITS
-async function updateCredits(userId, creditFee) {
+export async function updateCredits(userId, creditFee) {
   try {
     await connectToDatabase();
 
@@ -91,10 +91,6 @@ async function updateCredits(userId, creditFee) {
   }
 }
 
-module.exports = {
-  createUser,
-  getUserById,
-  updateUser,
-  deleteUser,
-  updateCredits,
-};
+ 
+
+

@@ -1,4 +1,4 @@
-import { Document, Schema, model, models } from "mongoose";
+const { default: mongoose, Schema } = require("mongoose");
 
 const ImageSchema = new Schema({
   title: { type: String, required: true },
@@ -17,6 +17,6 @@ const ImageSchema = new Schema({
   updatedAt: { type: Date, default: Date.now }
 });
 
-const Image = models?.Image || model('Image', ImageSchema);
+const Image = mongoose.models.Image || mongoose.model('Image', ImageSchema); 
 
-export default Image;
+module.exports = Image;

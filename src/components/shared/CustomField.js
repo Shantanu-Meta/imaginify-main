@@ -1,6 +1,5 @@
 import React from "react";
 import { Control } from "react-hook-form";
-import { z } from "zod";
 
 import {
   FormField,
@@ -10,15 +9,11 @@ import {
   FormLabel,
 } from "../ui/form";
 
+
+// Assuming formSchema is already defined in TransformationForm.js
 import { formSchema } from "./TransformationForm";
 
-const CustomField = ({
-  control,
-  render,
-  name,
-  formLabel,
-  className,
-}) => {
+const CustomField = ({control,render,name,formLabel,className}) => {
   return (
     <FormField
       control={control}
@@ -26,12 +21,17 @@ const CustomField = ({
       render={({ field }) => (
         <FormItem className={className}>
           {formLabel && <FormLabel>{formLabel}</FormLabel>}
+
           <FormControl>{render({ field })}</FormControl>
+          
           <FormMessage />
         </FormItem>
       )}
     />
+    
   );
 };
 
-export { CustomField };
+export default CustomField;
+
+

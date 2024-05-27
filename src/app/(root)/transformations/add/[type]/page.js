@@ -8,7 +8,6 @@ import { redirect } from 'next/navigation';
 const AddTransformationTypePage = async ({ params }) => {
   const { type } = params;
   const { userId } = auth();
-  console.log("User ID -> " + userId)
   const transformation = transformationTypes[type];
 
   if (!userId) redirect('/sign-in');
@@ -28,6 +27,7 @@ const AddTransformationTypePage = async ({ params }) => {
           userId={user._id}
           type={transformation.type}
           creditBalance={user.creditBalance}
+          config={transformation.config}
         />
       </section>
     </>

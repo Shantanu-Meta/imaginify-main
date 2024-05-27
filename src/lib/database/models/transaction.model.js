@@ -1,4 +1,4 @@
-import { Schema, model, models } from "mongoose";
+const { default: mongoose, Schema } = require("mongoose");
 
 const TransactionSchema = new Schema({
   createdAt: {
@@ -26,6 +26,6 @@ const TransactionSchema = new Schema({
   },
 });
 
-const Transaction = models?.Transaction || model("Transaction", TransactionSchema);
+let Transaction = mongoose.models.Transaction || mongoose.model('Transaction', TransactionSchema); 
 
-export default Transaction;
+module.exports = Transaction;
