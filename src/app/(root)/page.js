@@ -11,13 +11,13 @@ const Home = ({ searchParams }) => {
   const searchQuery = searchParams?.query || "";
   const [images, setImages] = useState(null);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const resp = await getAllImages({ page, searchQuery });
-  //     setImages(resp);
-  //   };
-  //   fetchData();
-  // }, [searchParams]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const resp = await getAllImages({ page, searchQuery });
+      setImages(resp);
+    };
+    fetchData();
+  }, [searchParams]);
 
   return (
     <>

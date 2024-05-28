@@ -33,6 +33,7 @@ import { getCldImageUrl } from "next-cloudinary"
 import { addImage, updateImage } from "@/lib/actions/image.actions"
 import { useRouter } from "next/navigation"
 import { InsufficientCreditsModal } from "./InsufficientCreditsModal"
+import { useToast } from '../ui/use-toast'
 
 export const formSchema = z.object({
     title: z.string(),
@@ -51,6 +52,7 @@ const TransformationForm = ({action,data = null,userId,type,creditBalance,config
     const [transformationConfig, setTransformationConfig] = useState(config);
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
+    const {toast} = useToast(); 
 
       const initialValues = data && action === "Update"? {
           title: data?.title,
@@ -68,7 +70,6 @@ const TransformationForm = ({action,data = null,userId,type,creditBalance,config
       });
     
       async function onSubmit(values) {
-        setIsSubmitting(true);
     
         if (data || image) {
           const transformationUrl = getCldImageUrl({
@@ -92,8 +93,21 @@ const TransformationForm = ({action,data = null,userId,type,creditBalance,config
             color: values.color,
           };
     
+          if(!values.title ){
+            toast({
+              title: "Title is missing",
+              description: "Enter a title to save...",
+              duration: 3000,
+              className: "error-toast",
+            });
+            return;
+          }
+
+          setIsSubmitting(true);
+
           if (action === "Add") {
             try {
+              
               const newImage = await addImage({
                 image: imageData,
                 userId,
@@ -144,7 +158,7 @@ const TransformationForm = ({action,data = null,userId,type,creditBalance,config
         }));
     
         setNewTransformation(transformationType.config);
-    
+
         return onChangeField(value);
       };
     
@@ -303,7 +317,7 @@ const TransformationForm = ({action,data = null,userId,type,creditBalance,config
           <Button
             type="button"
             className="submit-button capitalize"
-            disabled={isTransforming || newTransformation === null}
+            disabled={(isTransforming || newTransformation === null || !image?.publicId) || (action==="Update" && (type==="restore" || type==="removeBackground"))}
             onClick={onTransformHandler}
           >
             {isTransforming ? "Transforming..." : "Apply Transformation"}
